@@ -103,6 +103,10 @@ def earnings():
 
 pick_year = input("\nWhich year do you want to open?\nResponse: ")
 pick_month = input("\nWhich month do you want to open?\nResponse: ").lower()
+
+# If folder doesnt exist program creates it
+folder_path = f"years/{pick_year}"
+os.makedirs(folder_path, exist_ok=True)
 way_to_file = f"years/{pick_year}/{pick_month}"
 
 # Verifying the existence of a file and possibly creating it + adding content
