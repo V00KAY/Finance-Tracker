@@ -1,34 +1,92 @@
 import json
 import os
 import time
+from data import data
 
 os.system("cls")
 
-data = {
-    "earnings": {
-        "Prace": 0,
-        "Resell": 0,
-        "Klossik (listek)": 0,
-        "Mesicnak": 0,
-        "Jine": 0,
-    },
-    "expenses": 0,
-    "revision": {
-        "investions": {
-            "Revolut Robo": 0,
-            "Investown": 0,
-            "Fingood": 0,
-            "Investicni predmety": 0,
-            "Investicni listky": 0,
-        },
-        "free funds": {
-            "Airbank": 0,
-            "Revolut Finance": 0,
-            "Stovkomat": 0,
-            "Hotovost": 0,
-        },
-    }
-}
+# Function
+def status():
+    earnings = 0
+    for one_key, one_value in data["earnings"].items():
+        earnings += one_value
+        print(f"{one_key} : {one_value} Kč")
+    expenses = data["expenses"]
+
+    os.system("cls")
+    print(f"\n---\nTotal earnings: {earnings} Kč\nTotal expenses: {expenses} Kč\n---\nStatus = {earnings-expenses} Kč\n---")
+    x = input("<Ent>")
+    os.system("cls")
+
+def review():
+    os.system("cls")
+
+    lets_continue1 = True
+    while lets_continue1:
+        summary = 0
+        investion = 0
+        print("---")
+
+        for one_key, one_value in data["revision"]["free funds"].items():
+            summary += int(one_value)
+            print(f"{one_key} : {one_value} Kč")
+        for one_key, one_value in data["revision"]["investions"].items():
+            summary += int(one_value)
+            investion += int(one_value)
+            print(f"{one_key} : {one_value} Kč")
+
+        try:
+            percent = investion / (summary / 100)
+        except ZeroDivisionError:
+            percent = 0
+
+        print("---")
+        print(f"Total balance: {summary} Kč")
+        print(f"Of which investment: {investion} Kč or {round(percent, 1)} %")
+        print("---")
+
+
+        AorN = input("Change value (a/n)?  ")
+        if AorN == "n":
+            lets_continue1 = False
+        else:
+            change = input("Enter what you want to change: ")
+            set_to = input("\nEnter the amount: ")
+            data["revision"][change] = set_to
+        os.system("cls")
+
+def expenses():
+    os.system("cls")
+    how_much = int(input("\nEnter the amount: "))
+    data["expenses"] += how_much
+    os.system("cls")
+
+    print(f"\n---\nTotal expenses: {data["expenses"]} Kč\n---")
+    x = input("<Ent>")
+    os.system("cls")
+
+def earnings():
+    os.system("cls")
+
+    summary = 0
+    print("---")
+    for one_key, one_value in data["earnings"].items():
+        summary += one_value
+        print(f"{one_key} : {one_value} Kč")
+
+    print("---")
+    print(f"Total earnings: {summary} Kč")
+    print("---")
+
+    AorN = input("Change value (a/n)?  ")
+    if AorN == "n":
+        pass
+    else:
+        change = input("Enter what you want to change: ")
+        set_to = int(input("\nEnter the amount: "))
+        data["earnings"][change] = data["earnings"][change] + set_to
+    os.system("cls")
+
 
 pick_year = input("\nWhich year do you want to open?\nResponse: ")
 pick_month = input("\nWhich month do you want to open?\nResponse: ").lower()
@@ -54,91 +112,23 @@ lets_continue = True
 while lets_continue:
 
     print("\nWhat do you want to do?\n\n(1) Add earnings\n(2) Add expenses\n(3) Show current status\n(4) Add monthly review\n(5) Exit")
-    way = int(input("\nOdpověd: "))
 
+    way = int(input("\nOdpověd: "))
     if way == 5:
         lets_continue = False
-    elif way == 3:
-        earnings = 0
-        for one_key, one_value in data["earnings"].items():
-            earnings += one_value
-            print(f"{one_key} : {one_value} Kč")
-        expenses = data["expenses"]
-
-        os.system("cls")
-        print(f"\n---\nTotal earnings: {earnings} Kč\nTotal expenses: {expenses} Kč\n---\nStatus = {earnings-expenses} Kč\n---")
-        x = input("<Ent>")
-        os.system("cls")
 
     elif way == 4:
-        os.system("cls")
+        review()
 
-        lets_continue1 = True
-        while lets_continue1:
-            summary = 0
-            investion = 0
-            print("---")
-
-            for one_key, one_value in data["revision"]["free funds"].items():
-                summary += int(one_value)
-                print(f"{one_key} : {one_value} Kč")
-            for one_key, one_value in data["revision"]["investions"].items():
-                summary += int(one_value)
-                investion += int(one_value)
-                print(f"{one_key} : {one_value} Kč")
-
-            try:
-                percent = investion / (summary / 100)
-            except ZeroDivisionError:
-                percent = 0
-
-            print("---")
-            print(f"Total balance: {summary} Kč")
-            print(f"Of which investment: {investion} Kč or {round(percent, 1)} %")
-            print("---")
-
-
-            AorN = input("Change value (a/n)?  ")
-            if AorN == "n":
-                lets_continue1 = False
-            else:
-                change = input("Enter what you want to change: ")
-                set_to = input("\nEnter the amount: ")
-                data["revision"][change] = set_to
-            os.system("cls")
+    elif way == 3:
+        status()
         
-
     elif way == 2:
-        os.system("cls")
-        how_much = int(input("\nEnter the amount: "))
-        data["expenses"] += how_much
-        os.system("cls")
-
-        print(f"\n---\nTotal expenses: {data["expenses"]} Kč\n---")
-        x = input("<Ent>")
-        os.system("cls")
+        expenses()
 
     elif way == 1:
-        os.system("cls")
+        earnings()
 
-        summary = 0
-        print("---")
-        for one_key, one_value in data["earnings"].items():
-            summary += one_value
-            print(f"{one_key} : {one_value} Kč")
-
-        print("---")
-        print(f"Total earnings: {summary} Kč")
-        print("---")
-
-        AorN = input("Change value (a/n)?  ")
-        if AorN == "n":
-            pass
-        else:
-            change = input("Enter what you want to change: ")
-            set_to = int(input("\nEnter the amount: "))
-            data["earnings"][change] = data["earnings"][change] + set_to
-        os.system("cls")
 
 # Closing a file and saving data after work
 with open(way_to_file, mode="w", encoding="utf-8") as file:
