@@ -5,7 +5,7 @@ from data import data
 
 os.system("cls")
 
-# Function
+# Functions
 def status():
     earnings = 0
     for one_key, one_value in data["earnings"].items():
@@ -51,8 +51,21 @@ def review():
             lets_continue1 = False
         else:
             change = input("Enter what you want to change: ")
-            set_to = input("\nEnter the amount: ")
-            data["revision"][change] = set_to
+            set_to = int(input("\nEnter the amount: "))
+            
+            found = False
+            for category in data["revision"]:
+                if change in data["revision"][category]:
+                    data["revision"][category][change] = set_to
+                    found = True
+                    break
+            
+            if found == False:
+                print(f"Chyba: Položka '{change}' nebyla nalezena.")
+                time.sleep(2)
+
+
+
         os.system("cls")
 
 def expenses():
@@ -113,7 +126,7 @@ while lets_continue:
 
     print("\nWhat do you want to do?\n\n(1) Add earnings\n(2) Add expenses\n(3) Show current status\n(4) Add monthly review\n(5) Exit")
 
-    way = int(input("\nOdpověd: "))
+    way = int(input("\nResponse: "))
     if way == 5:
         lets_continue = False
 

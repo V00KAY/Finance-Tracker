@@ -10,6 +10,7 @@ data = {
     "revision": {
         "investions": {
             "Revolut Robo": 0,
+            "Bitcoin": 0,
             "Investown": 0,
             "Fingood": 0,
             "Investicni predmety": 0,
