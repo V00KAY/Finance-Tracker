@@ -5,7 +5,13 @@ import time
 os.system("cls")
 
 data = {
-    "earnings": 0,
+    "earnings": {
+        "Prace": 0,
+        "Resell": 0,
+        "Klossik (listek)": 0,
+        "Mesicnak": 0,
+        "Jine": 0,
+    },
     "expenses": 0,
     "revision": {
         "investions": {
@@ -13,19 +19,19 @@ data = {
             "Investown": 0,
             "Fingood": 0,
             "Investicni predmety": 0,
-            "Investicni listky": 0
+            "Investicni listky": 0,
         },
         "free funds": {
             "Airbank": 0,
             "Revolut Finance": 0,
             "Stovkomat": 0,
-            "Hotovost": 0
-        }
+            "Hotovost": 0,
+        },
     }
 }
 
-pick_year = input("\nWhich year do you want to open?\nOdpověd: ")
-pick_month = input("\nWhich month do you want to open?\nOdpověd: ").lower()
+pick_year = input("\nWhich year do you want to open?\nResponse: ")
+pick_month = input("\nWhich month do you want to open?\nResponse: ").lower()
 way_to_file = f"years/{pick_year}/{pick_month}"
 
 # Verifying the existence of a file and possibly creating it + adding content
@@ -47,13 +53,16 @@ with open(way_to_file, mode="r", encoding="utf-8") as file:
 lets_continue = True
 while lets_continue:
 
-    print("\nWhat do you want to do??\n\n(1) Add earnings\n(2) Add expenses\n(3) Show current status\n(4) Add monthly review\n(5) Exit")
+    print("\nWhat do you want to do?\n\n(1) Add earnings\n(2) Add expenses\n(3) Show current status\n(4) Add monthly review\n(5) Exit")
     way = int(input("\nOdpověd: "))
 
     if way == 5:
         lets_continue = False
     elif way == 3:
-        earnings = data["earnings"]
+        earnings = 0
+        for one_key, one_value in data["earnings"].items():
+            earnings += one_value
+            print(f"{one_key} : {one_value} Kč")
         expenses = data["expenses"]
 
         os.system("cls")
@@ -78,10 +87,14 @@ while lets_continue:
                 investion += int(one_value)
                 print(f"{one_key} : {one_value} Kč")
 
-            percent = round(investion/(summary/100), 1)
+            try:
+                percent = investion / (summary / 100)
+            except ZeroDivisionError:
+                percent = 0
+
             print("---")
             print(f"Total balance: {summary} Kč")
-            print(f"Of which investment: {investion} Kč or {percent} %")
+            print(f"Of which investment: {investion} Kč or {round(percent, 1)} %")
             print("---")
 
 
@@ -107,12 +120,24 @@ while lets_continue:
 
     elif way == 1:
         os.system("cls")
-        how_much = int(input("\nEnter the amount: "))
-        data["earnings"] += how_much
-        os.system("cls")
 
-        print(f"\n---\nTotal earnings: {data["earnings"]} Kč\n---")
-        x = input("<Ent>")
+        summary = 0
+        print("---")
+        for one_key, one_value in data["earnings"].items():
+            summary += one_value
+            print(f"{one_key} : {one_value} Kč")
+
+        print("---")
+        print(f"Total earnings: {summary} Kč")
+        print("---")
+
+        AorN = input("Change value (a/n)?  ")
+        if AorN == "n":
+            pass
+        else:
+            change = input("Enter what you want to change: ")
+            set_to = int(input("\nEnter the amount: "))
+            data["earnings"][change] = data["earnings"][change] + set_to
         os.system("cls")
 
 # Closing a file and saving data after work
